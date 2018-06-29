@@ -1,0 +1,25 @@
+{
+  "name": "wml_score_app",
+  "version": "1.0.0",
+  "description": "Scoring WML Model",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "Scoring",
+    "WML",
+    "ScoringApp"
+  ],
+  "author": "Gopi Varadarajulu",
+  "license": "ISC",
+  "dependencies": {
+    "btoa": "^1.2.1",
+    "cfenv": "^1.1.0",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {}
+}

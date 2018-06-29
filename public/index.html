@@ -1,0 +1,269 @@
+<html>
+	<title>Tech Academy - Data Dealers - Watson Machine Learning Scoring Demo</title>
+<head>
+  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    .container {
+		padding: 20px;
+    }
+
+    #header {
+      font-weight: bold;
+      padding-bottom: 20px;
+    }
+
+    #result {
+      font-weight: bold;
+	  font-size:20px;
+	  color: black;
+    }
+	
+	#logo {
+		height: 25%;
+		width: 50%;
+	}
+	
+	
+  </style>
+  <script>
+    function updateFormOnSubmit() {
+	  console.log("Index.html updateFormOnSubmit " ); // OK
+
+      document.getElementById('submit').disabled = true;
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+    }
+    function updateFormAfterSubmit(response) {
+	console.log("Index.html  updateFormAfterSubmit " ); // OK
+
+	// FCH : correction avec format de retour
+	// FCH : le retour a pour format {"fields": ["prediction", "probability"], "values": [[0.02333274483680725, 0.02333274483680725]]}
+	  document.getElementById('result.prediction').innerHTML = response.values[0][response.fields.indexOf("prediction")];
+      document.getElementById('result.probability').innerHTML = response.values[0][response.fields.indexOf("probability")];
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('submit').disabled = false;
+    }
+    function score() {
+      updateFormOnSubmit();
+	  // Watson ML input for this UC AdTracking
+	  // {'values': [[1, 2, 3, 4, 5, 6, 7]], 'fields': ['app', 'device', 'os', 'channel', 'click_by_ip', 'doy', 'hob']}
+ 
+	  // correction 
+	  // FCH : ajout de crochets car values doit etre un [[..]] et non un [....]
+	 var data = {
+		'values' : [[ 
+        document.getElementById('APP').value,
+		document.getElementById('DEVICE').value,
+		document.getElementById('OS').value,
+        document.getElementById('CHANNEL').value,
+		document.getElementById('CLICK_BY_IP').value,
+        document.getElementById('DOY').value,
+		document.getElementById('HOD').value
+		]],
+		'fields' : ['app', 'device', 'os', 'channel', 'click_by_ip', 'doy', 'hob']
+      };
+	  
+
+		 
+      // HTTP POST to /api/score
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/score', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function () {
+
+	  
+  //      if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+      if (xhr.readyState == XMLHttpRequest.DONE ) {
+	  console.log("Index.html STATUS is " + xhr.status); // OK
+          let response = JSON.parse(xhr.responseText);
+          console.log("Index.html Response is " + JSON.stringify(response)); // OK
+          // FCH : le retour a pour format {"fields": ["prediction", "probability"], "values": [[0.02333274483680725, 0.02333274483680725]]}
+          updateFormAfterSubmit(response);
+        }
+      }
+	  console.log("Index.html about to post data " + JSON.stringify(data)); // OK
+      xhr.send(JSON.stringify(data));
+    }
+    function bodyLoaded() {
+      document.getElementById('submit').onclick = function () {
+	  console.log("Index.html about to call score "); // OK
+        score();
+        return false;
+      }
+	  	  
+	 document.body.style.backgroundImage = "url('./images/Pres_Hackaton_V4 background.jpg')";
+	 document.body.style.backgroundRepeat = "no-repeat";
+	 document.body.style.backgroundSize = "cover";
+	 
+    }
+  </script>
+</head>
+
+<body onload="bodyLoaded();">
+
+<div class="container">
+	<div class="row">
+	<div class="col-sm-4" ><img id="logo" src="./images/Pres_Hackaton_V4 logo.jpg"></div>
+	<div class="col-sm-4" >
+		<h3 align="center">Tech Academy - Data Dealers</h3>
+		<h4 align="center">Watson Machine Learning Scoring Demo</h4>
+	</div>
+
+	</div>
+ 
+<br>
+<br>
+
+		<div class="row">
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="APP">APP</label>
+					</div>
+					<div class="col-sm-4" >
+						<input id="APP" type="number" value="9" required>
+					</div>
+				</div> 
+			</div>
+			
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="DEVICE">DEVICE</label>
+					</div>
+					<div class="col-sm-4" >
+						<input id="DEVICE" type="number" value="1" required>
+					</div>
+				</div> 
+			</div>
+			
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="OS">OS</label>
+					</div>
+					<div class="col-sm-4" >
+						<input id="OS" type="number" value="3" required>
+					</div>
+				</div> 
+			</div>
+
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="CHANNEL">CHANNEL</label>
+					</div>
+					<div class="col-sm-4" >
+						<input id="CHANNEL" type="number" value="107" required>
+					</div>
+				</div> 
+			</div>
+			
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="CLICK_BY_IP">CLICK_BY_IP</label>
+					</div>
+					<div class="col-sm-4" >
+						<input id="CLICK_BY_IP" type="number" value="2" required>
+					</div>
+				</div> 
+			</div>
+			
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="DOY">DOY</label>
+					</div>
+					<div class="col-sm-4" >
+						 <input id="DOY" type="number" value="314" required>
+					</div>
+				</div> 
+			</div>
+
+		</div>
+		<br>
+
+		<div class="row">
+			<div class="col-sm-4" align="center"></div>
+			<div class="col-sm-4" align="left">
+				<div class="row"  align="center">
+					<div class="col-sm-4" >
+						<label for="HOD">HOD</label>
+					</div>
+					<div class="col-sm-4" >
+						<input id="HOD" type="number" value="4" required>
+					</div>
+				</div> 
+			</div>
+			<div class="col-sm-4" align="center"></div>
+		</div>
+		<br>
+	
+    <div class="row">
+    		<div class="col-sm-4" align="center"></div>
+    		<div class="col-sm-4" align="center">
+    			<button id="submit" type="button">Submit</button>
+    		</div>
+    		<div class="col-sm-4" align="center"></div>
+     
+    </div>
+    <br>
+    
+    <div id="loading" class="row" style="display: none;">
+		<div class="col-sm-4" align="center"></div>
+		<div class="col-sm-4" align="center">
+	    		<div class="progress">
+	        		<div class="indeterminate"></div>
+	      	</div>
+	     </div>
+      	<div class="col-sm-4" align="center"></div>
+    </div>
+    <br>
+    
+    <div class="row" >
+			<div class="col-sm-4" align="center"></div>
+			<div class="col-sm-4" align="center">
+				<div id="result" class="row"  align="center" style="display: none;">
+					<div class="row"  align="center">
+						<div class="col-sm-4" >
+							<label>Prediction</label>
+						</div>
+						<div class="col-sm-4" >
+							<label id="result.prediction"></label>
+						</div>
+					</div>
+					<div class="row"  align="center">
+						<div class="col-sm-4" >
+							<label>Probability</label>
+						</div>
+						<div class="col-sm-4" >
+							<label id="result.probability"></label>
+						</div>
+					</div>
+				</div> 
+			</div>
+			<div class="col-sm-4" align="center"></div>
+		</div>
+		
+  </div>
+  
+
+  <script>
+    $(document).ready(function () {
+      //$('select').material_select();
+    });
+  </script>
+</body>
+
+</html>

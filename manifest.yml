@@ -1,0 +1,12 @@
+applications:
+- path: .
+  buildpack: sdk-for-nodejs
+  no-route: false
+  memory: 128M
+  instances: 1
+  domain: mybluemix.net
+  name: datadealerswmltester
+  host: datadealerswmltester
+disk_quota: 256M
+services:
+ - WMLDataDealers
