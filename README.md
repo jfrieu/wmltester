@@ -15,7 +15,7 @@ The file should look similar to the following:
 
 ```
 	WML_USERNAME : "3f027710-3905-4f25-9be8-4cc5f2ddcaec",
-    WML_PASSWORD : "772a0ac9-2766-4968-b47a-3335acc5d7ee",
+    	WML_PASSWORD : "772a0ac9-2766-4968-b47a-3335acc5d7ee",
 	WML_SERVICE_PATH : 'https://ibm-watson-ml.mybluemix.net',
 	WML_INSTANCE_ID:"7f2d88d2-84f4-4136-ad1c-8318051c8263",
 	WML_MODEL_ID:"f2681482-07b3-4aa9-ac46-ffcf5b42831b",
